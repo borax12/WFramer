@@ -28,7 +28,7 @@ void draw(){
   background(255);
   //print(shapeList.size());
   for(WShape shape:shapeList){
-    shape(shape.shapeData);
+    shape.render();
   }
   
   if(isDragging&&rectMode){
@@ -46,11 +46,15 @@ void draw(){
   if(isDragging&&moveMode&&currentShape!=null){
     displacedX = mouseX - originRectX;
     displacedY = mouseY - originRectY;
-    if(currentShape.shapeData.getKind() == RECT){
+    
+    if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == RECT){
       rect(currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
     }
-    else{
+    else if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == ELLIPSE){
       ellipse(currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
+    }
+    else{
+      ((WText)currentShape).render(mouseX,mouseY);
     }
   }
 }
@@ -103,7 +107,7 @@ void mouseReleased(){
       shapeList.add(currentShape);
     }
     if(moveMode&&currentShape!=null){
-      if(currentShape.shapeData.getKind() == RECT){
+      if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == RECT){
         PShape newShape = createShape(RECT,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
         newShape.setStroke(strokeColor);
         newShape.setStrokeWeight(strokeWeight);
@@ -111,7 +115,7 @@ void mouseReleased(){
         currentShape = new WShape(newShape,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
         shapeList.add(currentShape);
       }
-      else{
+      else if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == ELLIPSE){
         PShape newShape = createShape(ELLIPSE,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
         newShape.setStroke(strokeColor);
         newShape.setStrokeWeight(strokeWeight);
@@ -119,7 +123,11 @@ void mouseReleased(){
         currentShape = new WShape(newShape,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
         shapeList.add(currentShape);
       }
-      sortList(shapeList);
+      else{
+        currentShape = new WText(((WText)currentShape).text,mouseX,mouseY);
+        shapeList.add(currentShape);
+      }
+      //sortList(shapeList);
     }
   }
   

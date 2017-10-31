@@ -11,6 +11,9 @@ class WShape{
   public float shapeWidth;
   public float shapeHeight;
   
+  public WShape(){
+  }
+  
   public WShape(PShape shape, float x, float y,float w, float h){
     id = Long.valueOf(millis());
     shapeData = shape;
@@ -38,6 +41,10 @@ class WShape{
   
   public int hashCode() {
     return id.hashCode();
+  }
+  
+  public void render(){
+    shape(shapeData);
   }
   
 }
