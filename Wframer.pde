@@ -15,7 +15,7 @@ color fillColor = color(240);
 
 void setup(){
   background(255);
-  size(800, 640);
+  size(1024, 640);
   stroke(strokeColor);
   strokeWeight(strokeWeight);
   fill(fillColor);
@@ -56,6 +56,11 @@ void draw(){
     else{
       ((WText)currentShape).render(mouseX,mouseY);
     }
+  }
+  if(textMode){
+    fill(color(255));
+    rect(width/2-110, 520, 254, 31);
+    fill(fillColor);
   }
 }
 

@@ -14,7 +14,6 @@ class WText extends WShape{
   }
 
   public boolean containShape(float x, float y){
-    print("I am here");
     return (x>=xPos) && (x<=(xPos+textWidth)) && (y>=yPos-12) && (y<=(yPos));
   }
   
