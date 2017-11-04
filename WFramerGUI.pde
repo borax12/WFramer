@@ -5,12 +5,14 @@ GImageButton circle_btn;
 GImageButton circle_on_btn; 
 GImageButton move_btn;
 GImageButton move_on_btn;
+GImageButton scale_btn;
+GImageButton scale_on_btn;
 GImageButton clear_btn;
 GImageButton text_btn;
 GImageButton text_on_btn;
 GTextField textfield;
 
-boolean rectMode,circleMode,moveMode,textMode;
+boolean rectMode,circleMode,moveMode,textMode,scaleMode;
 
 // Create all the GUI controls. 
 public void createGUI(){
@@ -19,7 +21,7 @@ public void createGUI(){
   G4P.setCursor(ARROW);
   surface.setTitle("Sketch Window");
   
-  float buttonsStart = width/2-110;
+  float buttonsStart = width/2-160;
   
   rect_btn = new GImageButton(this, buttonsStart, 570, 50, 50, new String[] { "rect_off.png", "rect_off.png", "rect_off.png" } );
   rect_btn.addEventHandler(this, "rect_btn_click");
@@ -36,15 +38,20 @@ public void createGUI(){
   move_on_btn = new GImageButton(this, buttonsStart + 102, 570, 50, 50, new String[] { "move_on.png", "move_on.png", "move_on.png" } );
   move_on_btn.addEventHandler(this, "move_on_btn_click");
   
-  clear_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "clear_btn.png", "clear_hover_btn.png", "clear_hover_btn.png" } );
+  scale_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "move_off.png", "move_off.png", "move_off.png" } );
+  scale_btn.addEventHandler(this, "scale_btn_click");
+  scale_on_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "move_on.png", "move_on.png", "move_on.png" } );
+  scale_on_btn.addEventHandler(this, "scale_on_btn_click");
+  
+  clear_btn = new GImageButton(this, buttonsStart + 204, 570, 50, 50, new String[] { "clear_btn.png", "clear_hover_btn.png", "clear_hover_btn.png" } );
   clear_btn.addEventHandler(this, "clear_btn_click");
   
-  text_btn = new GImageButton(this, buttonsStart + 204, 570, 50, 50, new String[] { "text_btn.png", "text_hover.png", "text_hover.png" } );
+  text_btn = new GImageButton(this, buttonsStart + 255, 570, 50, 50, new String[] { "text_btn.png", "text_btn.png", "text_btn.png" } );
   text_btn.addEventHandler(this, "text_btn_click");
-  text_on_btn = new GImageButton(this, buttonsStart + 204, 570, 50, 50, new String[] { "text_hover.png", "text_hover.png", "text_hover.png" } );
+  text_on_btn = new GImageButton(this, buttonsStart + 255, 570, 50, 50, new String[] { "text_hover.png", "text_hover.png", "text_hover.png" } );
   text_on_btn.addEventHandler(this, "text_btn_on_click");
   
-  textfield = new GTextField(this, buttonsStart, 521, 254, 30, G4P.SCROLLBARS_NONE);
+  textfield = new GTextField(this, buttonsStart, 521, 304, 30, G4P.SCROLLBARS_NONE);
   textfield.setOpaque(true);
   textfield.addEventHandler(this, "textfield_change");
   textfield.setVisible(false);
@@ -85,39 +92,25 @@ public void move_on_btn_click(GImageButton source, GEvent event) {
   hideAllEnabledBtns();
 }
 
-public void clear_btn_click(GImageButton source, GEvent event) {
-  clearScreen();
-} 
-
-void hideAllEnabledBtns(){
- 
-  rect_on_btn.setVisible(false);
-  circle_on_btn.setVisible(false);
-  move_on_btn.setVisible(false);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rect_btn.setVisible(true);
-  circle_btn.setVisible(true);
-  move_btn.setVisible(true);
-  text_btn.setVisible(true);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
+public void scale_btn_click(GImageButton source, GEvent event) {
+  hideAllEnabledBtns();
+  scale_btn.setVisible(false);
+  scale_on_btn.setVisible(true);
+  scaleMode = true;
 }
 
-void clearScreen(){
-  background(255);
-  shapeList.clear();
+public void scale_on_btn_click(GImageButton source, GEvent event) {
   hideAllEnabledBtns();
+}
+
+public void clear_btn_click(GImageButton source, GEvent event) {
+  clearScreen();
 }
 
 public void text_btn_click(GImageButton source, GEvent event) {
   hideAllEnabledBtns();
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
+  text_btn.setVisible(false);
+  text_on_btn.setVisible(true);
   textfield.setVisible(true);
   textMode = true;
 } 
@@ -128,7 +121,35 @@ public void text_btn_on_click(GImageButton source, GEvent event) {
 
 public void textfield_change(GTextField source, GEvent event) { //_CODE_:textfield:545073:
   println("textfield - GTextField >> GEvent." + event + " @ " + millis());
-  if(event.equals(GEvent.ENTERED)){ //<>//
+  if(event.equals(GEvent.ENTERED)){
     shapeList.add(new WText(textfield.getText(),width/2,height/2));
   }
+}
+
+void hideAllEnabledBtns(){
+ 
+  rect_on_btn.setVisible(false);
+  circle_on_btn.setVisible(false);
+  move_on_btn.setVisible(false);
+  scale_on_btn.setVisible(false);
+  text_on_btn.setVisible(false);
+  textfield.setVisible(false);
+  
+  rect_btn.setVisible(true);
+  circle_btn.setVisible(true);
+  move_btn.setVisible(true);
+  scale_btn.setVisible(true);
+  text_btn.setVisible(true);
+  
+  rectMode = false;
+  circleMode = false;
+  moveMode = false;
+  scaleMode = false;
+  textMode = false;
+}
+
+void clearScreen(){
+  background(255);
+  shapeList.clear();
+  hideAllEnabledBtns();
 }

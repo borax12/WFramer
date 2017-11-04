@@ -1,10 +1,10 @@
-import g4p_controls.*;
+import g4p_controls.*; //<>//
 import java.util.Iterator;
 import java.util.*;
 
 
-float originMouseX,originMouseY,rectWidth,rectHeight, circleWidth,circleHeight,displacedX,displacedY,originalXPos,originalYPos,newX,newY;
-boolean isDragging,shiftPressed;
+float originMouseX, originMouseY, currentWidth, currentHeight, displacedX, displacedY, originalXPos, originalYPos;
+boolean isDragging, shiftPressed;
 WShape currentShape;
 ArrayList<WShape> shapeList;
 
@@ -13,7 +13,7 @@ int strokeWeight = 3;
 color fillColor = color(240);
 
 
-void setup(){
+void setup() {
   background(255);
   stroke(strokeColor);
   strokeWeight(strokeWeight);
@@ -24,102 +24,108 @@ void setup(){
   hideAllEnabledBtns();
 }
 
-void draw(){
+void draw() {
   background(255);
   //print(shapeList.size());
-  for(WShape shape:shapeList){
-    shape.render();
-  }
-  
-  if(isDragging&&rectMode){
-    if(shiftPressed){
-      rect(originMouseX,originMouseY,rectWidth,rectWidth);
-    }else{
-      rect(originMouseX,originMouseY,rectWidth,rectHeight);
+  if (shapeList!=null) {
+    for (WShape shape : shapeList) {
+      shape.render();
     }
-    
   }
-  if(isDragging&&circleMode){
-    if(shiftPressed){
-      ellipse(originMouseX+(circleWidth/2),originMouseY+(circleWidth/2),circleWidth,circleWidth);
-    }else{
-      ellipse(originMouseX+(circleWidth/2),originMouseY+(circleHeight/2),circleWidth,circleHeight); //<>//
-    } 
+
+  if (isDragging) {
+
+    if (rectMode) {
+      if (shiftPressed) {
+        rect(originMouseX, originMouseY, currentWidth, currentWidth);
+      } else {
+        rect(originMouseX, originMouseY, currentWidth, currentHeight);
+      }
+    }
+
+    if (circleMode) {
+      if (shiftPressed) {
+        ellipse(originMouseX+(currentWidth/2), originMouseY+(currentWidth/2), currentWidth, currentWidth);
+      } else {
+        ellipse(originMouseX+(currentWidth/2), originMouseY+(currentHeight/2), currentWidth, currentHeight);
+      }
+    }
   }
-  
-  if(moveMode&&currentShape!=null){
+
+
+  if (moveMode&&currentShape!=null) {
     displacedX = mouseX - originMouseX;
     displacedY = mouseY - originMouseY;
-    newX = originalXPos +displacedX;
-    newY = originalYPos +displacedY;
-    
-    if(currentShape.kind == RECT){
-      currentShape.xPos = newX;
-      currentShape.yPos = newY;
-    }
-    else if(currentShape.kind == ELLIPSE){
-      currentShape.xPos = newX;
-      currentShape.yPos = newY;
-    }
-    else{
+
+    if (currentShape.kind == RECT||currentShape.kind == ELLIPSE) {
+      currentShape.xPos = originalXPos +displacedX;
+      currentShape.yPos = originalYPos +displacedY;
+    } else {
       currentShape.xPos = mouseX;
-      currentShape.yPos = mouseY;        
+      currentShape.yPos = mouseY;
     }
   }
-  
-  if(textMode){
+
+  if (scaleMode&&currentShape!=null) {
+    displacedX = mouseX - originMouseX;
+    displacedY = mouseY - originMouseY;
+
+    if (currentShape.kind == RECT||currentShape.kind == ELLIPSE) {
+      currentShape.shapeWidth = currentWidth +displacedX;
+      currentShape.shapeHeight = currentHeight +displacedY;
+    }
+  }
+
+  if (textMode) {
     fill(color(255));
     rect(width/2-110, 520, 254, 31);
     fill(fillColor);
   }
 }
 
-void mousePressed(){
+void mousePressed() {
   //println("mouse pressed");
   originMouseX = mouseX;
   originMouseY = mouseY;
-  if(moveMode){
+  if (moveMode||scaleMode) {
     findCurrentShape();
-    if(currentShape!=null){
+    if (currentShape!=null) {
       originalXPos = currentShape.xPos;
       originalYPos = currentShape.yPos;
+      currentWidth = currentShape.shapeWidth;
+      currentHeight = currentShape.shapeHeight;
     }
   }
 }
 
-void mouseDragged(){
+void mouseDragged() {
   //println("mouse dragging");
   isDragging=true;
-  if(rectMode){
-    rectWidth = mouseX - originMouseX;
-    rectHeight = mouseY - originMouseY;
-  }
-  if(circleMode){
-    circleWidth = mouseX - originMouseX;
-    circleHeight = mouseY - originMouseY;
+  if (rectMode||circleMode) {
+    currentWidth = mouseX - originMouseX;
+    currentHeight = mouseY - originMouseY;
   }
 }
 
 
-void mouseReleased(){
+void mouseReleased() {
   //println("mouse released");
-  if((isDragging)&&(mouseY<570)){
-    if(rectMode){
-      if(shiftPressed){
-        rectHeight = rectWidth;
+  if ((isDragging)&&(mouseY<570)) {
+    if (rectMode) {
+      if (shiftPressed) {
+        currentHeight = currentWidth;
       }
-      currentShape = new WShape(RECT,originMouseX,originMouseY,rectWidth,rectHeight);
-      shapeList.add(currentShape);
+      currentShape = new WShape(RECT, originMouseX, originMouseY, currentWidth, currentHeight);
     }
-    if(circleMode){
-      if(shiftPressed){
-        circleHeight = circleWidth;
+    if (circleMode) {
+      if (shiftPressed) {
+        currentHeight = currentWidth;
       }
-      currentShape = new WShape(ELLIPSE,originMouseX+(circleWidth/2),originMouseY+(circleHeight/2),circleWidth,circleHeight);
-      shapeList.add(currentShape);
+      currentShape = new WShape(ELLIPSE, originMouseX+(currentWidth/2), originMouseY+(currentHeight/2), currentWidth, currentHeight);
     }
+    shapeList.add(currentShape);
   }
-  
+
   currentShape = null;
   isDragging = false;
 }
@@ -128,33 +134,34 @@ void keyPressed() {
   if (key == CODED) {
     if (keyCode == SHIFT) {
       shiftPressed = true;
-    } 
-  } 
+    }
+  }
 }
 
 void keyReleased() {
   if (key == CODED) {
     if (keyCode == SHIFT) {
       shiftPressed = false;
-    } 
-  } 
+    }
+  }
 }
 
-void findCurrentShape(){
+void findCurrentShape() {
   for (Iterator<WShape> it = shapeList.iterator(); it.hasNext(); ) {
     WShape shape = it.next();
-    if(shape.containShape(mouseX,mouseY)){
+    if (shape.containShape(mouseX, mouseY)) {
       currentShape = shape;
     }
   }
 }
 
-void sortList(ArrayList<WShape> shapeList){
-  Collections.sort(shapeList, new Comparator<WShape>(){
+void sortList(ArrayList<WShape> shapeList) {
+  Collections.sort(shapeList, new Comparator<WShape>() {
     @Override
-    public int compare(WShape lhs, WShape rhs) {
-        // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
-        return lhs.id > rhs.id ? 1 : (lhs.id < rhs.id) ? -1 : 0;
+      public int compare(WShape lhs, WShape rhs) {
+      // -1 - less than, 1 - greater than, 0 - equal, all inversed for descending
+      return lhs.id > rhs.id ? 1 : (lhs.id < rhs.id) ? -1 : 0;
     }
-});
+  }
+  );
 }
