@@ -38,9 +38,9 @@ public void createGUI(){
   move_on_btn = new GImageButton(this, buttonsStart + 102, 570, 50, 50, new String[] { "move_on.png", "move_on.png", "move_on.png" } );
   move_on_btn.addEventHandler(this, "move_on_btn_click");
   
-  scale_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "move_off.png", "move_off.png", "move_off.png" } );
+  scale_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "scale_off.png", "scale_off.png", "scale_off.png" } );
   scale_btn.addEventHandler(this, "scale_btn_click");
-  scale_on_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "move_on.png", "move_on.png", "move_on.png" } );
+  scale_on_btn = new GImageButton(this, buttonsStart + 153, 570, 50, 50, new String[] { "scale_on_btn.png", "scale_on_btn.png", "scale_on_btn.png" } );
   scale_on_btn.addEventHandler(this, "scale_on_btn_click");
   
   clear_btn = new GImageButton(this, buttonsStart + 204, 570, 50, 50, new String[] { "clear_btn.png", "clear_hover_btn.png", "clear_hover_btn.png" } );

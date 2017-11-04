@@ -34,7 +34,6 @@ void draw() {
   }
 
   if (isDragging) {
-
     if (rectMode) {
       if (shiftPressed) {
         rect(originMouseX, originMouseY, currentWidth, currentWidth);
@@ -42,7 +41,6 @@ void draw() {
         rect(originMouseX, originMouseY, currentWidth, currentHeight);
       }
     }
-
     if (circleMode) {
       if (shiftPressed) {
         ellipse(originMouseX+(currentWidth/2), originMouseY+(currentWidth/2), currentWidth, currentWidth);
