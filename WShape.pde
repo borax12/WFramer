@@ -5,18 +5,18 @@ class WShape{
   */
   
   private Long id;
-  public PShape shapeData;
   public float xPos;
   public float yPos;
   public float shapeWidth;
   public float shapeHeight;
+  public int kind;
   
   public WShape(){
   }
   
-  public WShape(PShape shape, float x, float y,float w, float h){
+  public WShape(int shapeKind, float x, float y,float w, float h){
     id = Long.valueOf(millis());
-    shapeData = shape;
+    kind = shapeKind;
     xPos = x;
     yPos = y;
     shapeWidth = w;
@@ -24,7 +24,7 @@ class WShape{
   }
   
   public boolean containShape(float x, float y){
-    if(shapeData.getKind() == RECT){
+    if(kind == RECT){
       return (x>=xPos) && (x<=(xPos+shapeWidth)) && (y>=yPos) && (y<=(yPos+shapeHeight));
     }else{
       return (x>=(xPos-(shapeWidth/2))) && (x<=(xPos+(shapeWidth/2))) && (y>=(yPos-(shapeHeight/2))) && (y<=(yPos+(shapeHeight/2)));
@@ -44,7 +44,15 @@ class WShape{
   }
   
   public void render(){
-    shape(shapeData);
+    stroke(strokeColor);
+    strokeWeight(strokeWeight);
+    fill(fillColor);
+    if(kind == RECT){
+      rect(xPos,yPos,shapeWidth,shapeHeight);
+    }
+    else if(kind == ELLIPSE){
+      ellipse(xPos,yPos,shapeWidth,shapeHeight);
+    }
   }
   
 }

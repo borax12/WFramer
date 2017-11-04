@@ -3,7 +3,7 @@ import java.util.Iterator;
 import java.util.*;
 
 
-float originRectX,originRectY,rectWidth,rectHeight, circleWidth,circleHeight,displacedX,displacedY;
+float originMouseX,originMouseY,rectWidth,rectHeight, circleWidth,circleHeight,displacedX,displacedY,originalXPos,originalYPos,newX,newY;
 boolean isDragging,shiftPressed;
 WShape currentShape;
 ArrayList<WShape> shapeList;
@@ -16,9 +16,6 @@ color fillColor = color(240);
 void setup(){
   background(255);
   size(1024, 640);
-  stroke(strokeColor);
-  strokeWeight(strokeWeight);
-  fill(fillColor);
   shapeList = new ArrayList<WShape>();
   createGUI();
   hideAllEnabledBtns();
@@ -32,31 +29,37 @@ void draw(){
   }
   
   if(isDragging&&rectMode){
-    rect(originRectX,originRectY,rectWidth,rectHeight);
+    rect(originMouseX,originMouseY,rectWidth,rectHeight);
   }
   
   if(isDragging&&circleMode){
     if(shiftPressed){
-      ellipse(originRectX+(circleWidth/2),originRectY+(circleWidth/2),circleWidth,circleWidth);
+      ellipse(originMouseX+(circleWidth/2),originMouseY+(circleWidth/2),circleWidth,circleWidth);
     }else{
-      ellipse(originRectX+(circleWidth/2),originRectY+(circleHeight/2),circleWidth,circleHeight); //<>//
+      ellipse(originMouseX+(circleWidth/2),originMouseY+(circleHeight/2),circleWidth,circleHeight); //<>//
     } 
   }
   
-  if(isDragging&&moveMode&&currentShape!=null){
-    displacedX = mouseX - originRectX;
-    displacedY = mouseY - originRectY;
+  if(moveMode&&currentShape!=null){
+    displacedX = mouseX - originMouseX;
+    displacedY = mouseY - originMouseY;
+    newX = originalXPos +displacedX;
+    newY = originalYPos +displacedY;
     
-    if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == RECT){
-      rect(currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
+    if(currentShape.kind == RECT){
+      currentShape.xPos = newX;
+      currentShape.yPos = newY;
     }
-    else if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == ELLIPSE){
-      ellipse(currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
+    else if(currentShape.kind == ELLIPSE){
+      currentShape.xPos = newX;
+      currentShape.yPos = newY;
     }
     else{
-      ((WText)currentShape).render(mouseX,mouseY);
+      currentShape.xPos = mouseX;
+      currentShape.yPos = mouseY;        
     }
   }
+  
   if(textMode){
     fill(color(255));
     rect(width/2-110, 520, 254, 31);
@@ -66,10 +69,14 @@ void draw(){
 
 void mousePressed(){
   //println("mouse pressed");
-  originRectX = mouseX;
-  originRectY = mouseY;
+  originMouseX = mouseX;
+  originMouseY = mouseY;
   if(moveMode){
     findCurrentShape();
+    if(currentShape!=null){
+      originalXPos = currentShape.xPos;
+      originalYPos = currentShape.yPos;
+    }
   }
 }
 
@@ -84,8 +91,6 @@ void mouseDragged(){
     circleWidth = mouseX - originRectX;
     circleHeight = mouseY - originRectY;
   }
-  if(moveMode){
-  }
 }
 
 
@@ -93,46 +98,15 @@ void mouseReleased(){
   //println("mouse released");
   if((isDragging)&&(mouseY<570)){
     if(rectMode){
-      PShape newShape = createShape(RECT,originRectX,originRectY,rectWidth,rectHeight);
-      newShape.setStroke(strokeColor);
-      newShape.setStrokeWeight(strokeWeight);
-      newShape.setFill(fillColor);
-      currentShape = new WShape(newShape,originRectX,originRectY,rectWidth,rectHeight);
+      currentShape = new WShape(RECT,originRectX,originRectY,rectWidth,rectHeight);
       shapeList.add(currentShape);
     }
     if(circleMode){
       if(shiftPressed){
         circleHeight = circleWidth;
       }
-      PShape newShape = createShape(ELLIPSE,originRectX+(circleWidth/2),originRectY+(circleHeight/2),circleWidth,circleHeight);
-      newShape.setStroke(strokeColor);
-      newShape.setStrokeWeight(strokeWeight);
-      newShape.setFill(fillColor);
-      currentShape = new WShape(newShape,originRectX+(circleWidth/2),originRectY+(circleHeight/2),circleWidth,circleHeight);
+      currentShape = new WShape(ELLIPSE,originRectX+(circleWidth/2),originRectY+(circleHeight/2),circleWidth,circleHeight);
       shapeList.add(currentShape);
-    }
-    if(moveMode&&currentShape!=null){
-      if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == RECT){
-        PShape newShape = createShape(RECT,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
-        newShape.setStroke(strokeColor);
-        newShape.setStrokeWeight(strokeWeight);
-        newShape.setFill(fillColor);
-        currentShape = new WShape(newShape,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
-        shapeList.add(currentShape);
-      }
-      else if(currentShape.shapeData!=null && currentShape.shapeData.getKind() == ELLIPSE){
-        PShape newShape = createShape(ELLIPSE,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
-        newShape.setStroke(strokeColor);
-        newShape.setStrokeWeight(strokeWeight);
-        newShape.setFill(fillColor);
-        currentShape = new WShape(newShape,currentShape.xPos+displacedX,currentShape.yPos+displacedY,currentShape.shapeWidth,currentShape.shapeHeight);
-        shapeList.add(currentShape);
-      }
-      else{
-        currentShape = new WText(((WText)currentShape).text,mouseX,mouseY);
-        shapeList.add(currentShape);
-      }
-      //sortList(shapeList);
     }
   }
   
@@ -163,8 +137,6 @@ void findCurrentShape(){
       currentShape = shape;
     }
   }
-  if(currentShape!=null)
-    shapeList.remove(currentShape);
 }
 
 void sortList(ArrayList<WShape> shapeList){
