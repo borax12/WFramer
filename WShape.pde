@@ -44,9 +44,6 @@ class WShape{
   }
   
   public void render(){
-    stroke(strokeColor);
-    strokeWeight(strokeWeight);
-    fill(fillColor);
     if(kind == RECT){
       rect(xPos,yPos,shapeWidth,shapeHeight);
     }

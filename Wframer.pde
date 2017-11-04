@@ -15,6 +15,9 @@ color fillColor = color(240);
 
 void setup(){
   background(255);
+  stroke(strokeColor);
+  strokeWeight(strokeWeight);
+  fill(fillColor);
   size(1024, 640);
   shapeList = new ArrayList<WShape>();
   createGUI();
@@ -29,9 +32,13 @@ void draw(){
   }
   
   if(isDragging&&rectMode){
-    rect(originMouseX,originMouseY,rectWidth,rectHeight);
+    if(shiftPressed){
+      rect(originMouseX,originMouseY,rectWidth,rectWidth);
+    }else{
+      rect(originMouseX,originMouseY,rectWidth,rectHeight);
+    }
+    
   }
-  
   if(isDragging&&circleMode){
     if(shiftPressed){
       ellipse(originMouseX+(circleWidth/2),originMouseY+(circleWidth/2),circleWidth,circleWidth);
@@ -84,12 +91,12 @@ void mouseDragged(){
   //println("mouse dragging");
   isDragging=true;
   if(rectMode){
-    rectWidth = mouseX - originRectX;
-    rectHeight = mouseY - originRectY;
+    rectWidth = mouseX - originMouseX;
+    rectHeight = mouseY - originMouseY;
   }
   if(circleMode){
-    circleWidth = mouseX - originRectX;
-    circleHeight = mouseY - originRectY;
+    circleWidth = mouseX - originMouseX;
+    circleHeight = mouseY - originMouseY;
   }
 }
 
@@ -98,14 +105,17 @@ void mouseReleased(){
   //println("mouse released");
   if((isDragging)&&(mouseY<570)){
     if(rectMode){
-      currentShape = new WShape(RECT,originRectX,originRectY,rectWidth,rectHeight);
+      if(shiftPressed){
+        rectHeight = rectWidth;
+      }
+      currentShape = new WShape(RECT,originMouseX,originMouseY,rectWidth,rectHeight);
       shapeList.add(currentShape);
     }
     if(circleMode){
       if(shiftPressed){
         circleHeight = circleWidth;
       }
-      currentShape = new WShape(ELLIPSE,originRectX+(circleWidth/2),originRectY+(circleHeight/2),circleWidth,circleHeight);
+      currentShape = new WShape(ELLIPSE,originMouseX+(circleWidth/2),originMouseY+(circleHeight/2),circleWidth,circleHeight);
       shapeList.add(currentShape);
     }
   }

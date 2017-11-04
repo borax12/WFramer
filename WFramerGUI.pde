@@ -52,125 +52,37 @@ public void createGUI(){
 
 
 public void rect_btn_click(GImageButton source, GEvent event) {
+  hideAllEnabledBtns();
   rect_btn.setVisible(false);
-  rect_on_btn.setVisible(true);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
+  rect_on_btn.setVisible(true); 
   rectMode = true;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
 }
 
 public void rect_on_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
-  
+  hideAllEnabledBtns();
 }
 
 
 public void circle_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
+  hideAllEnabledBtns();
   circle_btn.setVisible(false);
   circle_on_btn.setVisible(true);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
   circleMode = true;
-  moveMode = false;
-  textMode = false;
 }
 
 public void circle_on_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
+  hideAllEnabledBtns();
 }
 
 public void move_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
+  hideAllEnabledBtns();
   move_btn.setVisible(false);
   move_on_btn.setVisible(true);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
-  circleMode = false;
   moveMode = true;
-  textMode = false;
 }
 
 public void move_on_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
+  hideAllEnabledBtns();
 }
 
 public void clear_btn_click(GImageButton source, GEvent event) {
@@ -178,16 +90,22 @@ public void clear_btn_click(GImageButton source, GEvent event) {
 } 
 
 void hideAllEnabledBtns(){
-  rect_btn.setVisible(true);
-  circle_btn.setVisible(true);
-  move_btn.setVisible(true);
-  text_btn.setVisible(true);
-  
+ 
   rect_on_btn.setVisible(false);
   circle_on_btn.setVisible(false);
   move_on_btn.setVisible(false);
   text_on_btn.setVisible(false);
   textfield.setVisible(false);
+  
+  rect_btn.setVisible(true);
+  circle_btn.setVisible(true);
+  move_btn.setVisible(true);
+  text_btn.setVisible(true);
+  
+  rectMode = false;
+  circleMode = false;
+  moveMode = false;
+  textMode = false;
 }
 
 void clearScreen(){
@@ -197,43 +115,15 @@ void clearScreen(){
 }
 
 public void text_btn_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(true);
-  move_on_btn.setVisible(false);
-  
+  hideAllEnabledBtns();
   text_btn.setVisible(true);
   text_on_btn.setVisible(false);
   textfield.setVisible(true);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
   textMode = true;
 } 
 
 public void text_btn_on_click(GImageButton source, GEvent event) {
-  rect_btn.setVisible(true);
-  rect_on_btn.setVisible(false);
-  
-  circle_btn.setVisible(true);
-  circle_on_btn.setVisible(false);
-  
-  move_btn.setVisible(false);
-  move_on_btn.setVisible(true);
-  
-  text_btn.setVisible(true);
-  text_on_btn.setVisible(false);
-  textfield.setVisible(false);
-  
-  rectMode = false;
-  circleMode = false;
-  moveMode = false;
-  textMode = false;
+  hideAllEnabledBtns();
 } 
 
 public void textfield_change(GTextField source, GEvent event) { //_CODE_:textfield:545073:
