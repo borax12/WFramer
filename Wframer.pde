@@ -18,7 +18,7 @@ void setup() {
   stroke(strokeColor);
   strokeWeight(strokeWeight);
   fill(fillColor);
-  size(1024, 640);
+  size(1024, 660);
   shapeList = new ArrayList<WShape>();
   createGUI();
   hideAllEnabledBtns();
@@ -29,7 +29,9 @@ void draw() {
   //print(shapeList.size());
   if (shapeList!=null) {
     for (WShape shape : shapeList) {
-      shape.render();
+      if (shape!=null) {
+        shape.render();
+      }
     }
   }
 
@@ -76,8 +78,13 @@ void draw() {
 
   if (textMode) {
     fill(color(255));
-    rect(width/2-110, 520, 254, 31);
+    rect(width/2-160, 520, 304, 31);
     fill(fillColor);
+  }
+  
+  float btnStart = width/2-160;
+  if ((mouseY<btnStart+(51*7))&&(mouseY>=570)&&(mouseX>=(width/2-160))&&(mouseX<=(width/2+145))) {
+    handleGUIToolTip(mouseX, mouseY);
   }
 }
 
@@ -133,6 +140,22 @@ void keyPressed() {
     if (keyCode == SHIFT) {
       shiftPressed = true;
     }
+  } else if (keyCode == TAB) {
+    hideAllEnabledBtns();
+  } else if (keyCode == 8) {
+    clearScreen();
+  } else if (key == 'r') {
+    enableRectMode();
+  } else if (key == 'o') {
+    enableEllispeMode();
+  } else if (key == 'v') {
+    enableMoveMode();
+  } else if (key == 'm') {
+    enableScaleMode();
+  } else if (key == 't') {
+    enableTextMode();
+  } else if (key == 's') {
+    exportScreen();
   }
 }
 
@@ -147,7 +170,7 @@ void keyReleased() {
 void findCurrentShape() {
   for (Iterator<WShape> it = shapeList.iterator(); it.hasNext(); ) {
     WShape shape = it.next();
-    if (shape.containShape(mouseX, mouseY)) {
+    if (shape!=null&&shape.containShape(mouseX, mouseY)) {
       currentShape = shape;
     }
   }
