@@ -83,7 +83,7 @@ void draw() {
   }
   
   float btnStart = width/2-160;
-  if ((mouseY<btnStart+(51*7))&&(mouseY>=570)&&(mouseX>=(width/2-160))&&(mouseX<=(width/2+145))) {
+  if ((mouseY<620)&&(mouseY>=570)&&(mouseX>=btnStart+(51*0))&&(mouseX<=btnStart+(51*8))) {
     handleGUIToolTip(mouseX, mouseY);
   }
 }
